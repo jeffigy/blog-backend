@@ -1,8 +1,6 @@
 import { test, describe } from "node:test";
-import assert from "node:assert";
-import { totalLikes, favoriteBlog } from "../src/utils/list_helper";
-import { BlogType } from "../src/types/BlogType";
-
+import { deepStrictEqual } from "node:assert";
+import listHelper from "../src/utils/list_helper.js";
 describe("favorite blog", () => {
   const blogs = [
     {
@@ -32,8 +30,8 @@ describe("favorite blog", () => {
   ];
 
   test("list the favorite blog", () => {
-    const result = favoriteBlog(blogs);
-    assert.deepStrictEqual(result, {
+    const result = listHelper.favoriteBlog(blogs);
+    deepStrictEqual(result, {
       _id: "661beaf413b4a678c6dbeb4a",
       title: "sample title",
       author: "John Doe",

@@ -1,11 +1,11 @@
-import express, { Request, Response } from "express";
 import cors from "cors";
-import BlogRoute from "./routes/blogRoutes";
-import { MONGODB_URI } from "./utils/config";
+import express from "express";
 import mongoose from "mongoose";
 import morgan from "morgan";
+import blogRoutes from "./routes/blogRoutes.js";
+import { MONGODB_URI } from "./utils/config.js";
 
-morgan.token("req-body", (req: Request, _res: Response) => {
+morgan.token("req-body", (req, _res) => {
   if (req.method === "POST") {
     return JSON.stringify(req.body);
   }
@@ -32,10 +32,10 @@ if (MONGODB_URI) {
     });
 }
 
-app.get("/", (_req: Request, res: Response) => {
+app.get("/", (_req, res) => {
   res.send({ message: "hello hello" });
 });
 
-app.use("/api/blogs", BlogRoute);
+app.use("/api/blogs", blogRoutes);
 
 export default app;

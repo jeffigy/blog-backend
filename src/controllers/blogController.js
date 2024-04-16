@@ -1,7 +1,6 @@
-import { Request, Response } from "express";
-import Blog from "../models/Blog";
+import Blog from "../models/Blog.js";
 
-const getAllBlogs = (_req: Request, res: Response) => {
+const getAllBlogs = (_req, res) => {
   Blog.find({}).then((blogs) => {
     if (!blogs.length) {
       res.status(400).send({ message: "no blogs found" });
@@ -11,7 +10,7 @@ const getAllBlogs = (_req: Request, res: Response) => {
   });
 };
 
-const newBlog = (req: Request, res: Response) => {
+const newBlog = (req, res) => {
   const blog = new Blog(req.body);
 
   blog

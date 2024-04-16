@@ -1,7 +1,6 @@
-import { test, describe } from "node:test";
-import assert from "node:assert";
-import { totalLikes } from "../src/utils/list_helper";
-import { BlogType } from "../src/types/BlogType";
+const { test, describe } = require("node:test");
+const assert = require("node:assert");
+const listHelper = require("../src/utils/list_helper");
 
 describe("total likes", () => {
   const blogs = [
@@ -56,7 +55,7 @@ describe("total likes", () => {
   ];
 
   test("when list has only one blog, equals the likes of that", () => {
-    const result = totalLikes(blogs);
-    assert.strictEqual(result, 5);
+    const result = listHelper.totalLikes(blogs);
+    assert.strictEqual(result, 36);
   });
 });

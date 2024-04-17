@@ -1,4 +1,4 @@
-import Blog from "../models/Blog.js";
+const Blog = require("../models/Blog");
 
 const getAllBlogs = (_req, res) => {
   Blog.find({}).then((blogs) => {
@@ -23,4 +23,4 @@ const newBlog = (req, res) => {
     });
 };
 
-export { getAllBlogs, newBlog };
+module.exports = { getAllBlogs, newBlog };

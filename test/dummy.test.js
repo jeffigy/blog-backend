@@ -1,10 +1,10 @@
-import { test, describe } from "node:test";
-import { strictEqual } from "node:assert";
-import listHelper from "../src/utils/list_helper";
+const { test, describe } = require("node:test");
+const assert = require("node:assert");
+const listHelper = require("../src/utils/list_helper");
 
 test("dummy returns", () => {
   const blogs = [];
 
   const result = listHelper.dummy(blogs);
-  strictEqual(result, 1);
+  assert.strictEqual(result, 1);
 });

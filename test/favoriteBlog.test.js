@@ -1,6 +1,6 @@
-import { test, describe } from "node:test";
-import { deepStrictEqual } from "node:assert";
-import listHelper from "../src/utils/list_helper.js";
+const { test, describe } = require("node:test");
+const assert = require("node:assert");
+const listHelper = require("../src/utils/list_helper");
 describe("favorite blog", () => {
   const blogs = [
     {
@@ -31,7 +31,7 @@ describe("favorite blog", () => {
 
   test("list the favorite blog", () => {
     const result = listHelper.favoriteBlog(blogs);
-    deepStrictEqual(result, {
+    assert.deepStrictEqual(result, {
       _id: "661beaf413b4a678c6dbeb4a",
       title: "sample title",
       author: "John Doe",

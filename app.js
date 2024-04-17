@@ -1,9 +1,9 @@
-import cors from "cors";
-import express from "express";
-import mongoose from "mongoose";
-import morgan from "morgan";
-import blogRoutes from "./routes/blogRoutes.js";
-import { MONGODB_URI } from "./utils/config.js";
+const cors = require("cors");
+const express = require("express");
+const mongoose = require("mongoose");
+const morgan = require("morgan");
+const blogRoutes = require("./routes/blogRoutes");
+const config = require("./utils/config");
 
 morgan.token("req-body", (req, _res) => {
   if (req.method === "POST") {
@@ -21,9 +21,9 @@ app.use(
   )
 );
 
-if (MONGODB_URI) {
+if (config.MONGODB_URI) {
   mongoose
-    .connect(MONGODB_URI)
+    .connect(config.MONGODB_URI)
     .then(() => {
       console.log(`connected to db`);
     })
@@ -38,4 +38,4 @@ app.get("/", (_req, res) => {
 
 app.use("/api/blogs", blogRoutes);
 
-export default app;
+module.exports = app;

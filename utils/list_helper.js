@@ -11,15 +11,11 @@ const favoriteBlog = (blogs) => {
     return undefined; // Return undefined if the array is empty
   }
 
-  return blogs
-    .reduce((prevHighest, currentPost) => {
-      return currentPost.likes > (prevHighest ? prevHighest.likes : 0)
-        ? currentPost
-        : prevHighest;
-    }, blogs[0])
-    .catch((error) => {
-      console.log(error);
-    });
+  return blogs.reduce((prevHighest, currentPost) => {
+    return currentPost.likes > (prevHighest ? prevHighest.likes : 0)
+      ? currentPost
+      : prevHighest;
+  }, blogs[0]);
 };
 
-export default { dummy, totalLikes, favoriteBlog };
+module.exports = { dummy, totalLikes, favoriteBlog };

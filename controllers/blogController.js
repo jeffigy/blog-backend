@@ -1,26 +1,15 @@
 const Blog = require("../models/Blog");
 
-const getAllBlogs = (_req, res) => {
-  Blog.find({}).then((blogs) => {
-    if (!blogs.length) {
-      res.status(400).send({ message: "no blogs found" });
-    } else {
-      res.json(blogs);
-    }
-  });
+const getAllBlogs = async (_req, res) => {
+  const blogs = await Blog.find({});
+  res.json(blogs);
 };
 
-const newBlog = (req, res) => {
+const newBlog = async (req, res) => {
   const blog = new Blog(req.body);
 
-  blog
-    .save()
-    .then((result) => {
-      res.status(201).json(result);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+  const savedBlog = await blog.save();
+  res.status(201).json(savedBlog);
 };
 
 module.exports = { getAllBlogs, newBlog };

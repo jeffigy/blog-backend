@@ -6,9 +6,21 @@ const getAllBlogs = async (_req, res) => {
 };
 
 const newBlog = async (req, res) => {
-  const blog = new Blog(req.body);
+  const { author, title, likes, url } = req.body;
 
-  const savedBlog = await blog.save();
+  if (!url || !title) {
+    return res.status(400).send("Something went wrong");
+  }
+
+  const entry = {
+    author,
+    title,
+    url,
+    likes: likes ? likes : 0,
+  };
+
+  const newBlog = new Blog(entry);
+  const savedBlog = await newBlog.save();
   res.status(201).json(savedBlog);
 };
 

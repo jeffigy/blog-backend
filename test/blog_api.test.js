@@ -92,6 +92,28 @@ describe("when there is initially some blogs saved", () => {
       await api.delete("/api/blogs").send(wrongId).expect(400);
     });
   });
+
+  describe("updating a blog", () => {
+    test("succeed on updating", async () => {
+      const blogsAtStart = await helper.blogsInDb();
+      const blogtoUpdate = blogsAtStart[0];
+
+      blogtoUpdate.title = "new title";
+      await api.patch("/api/blogs").send(blogtoUpdate).expect(200);
+
+      const blogsAtEnd = await helper.blogsInDb();
+      assert.strictEqual(blogsAtEnd[0].title, blogtoUpdate.title);
+    });
+
+    test("returns 404 on missing id, title, or url", async () => {
+      const blogs = await helper.blogsInDb();
+      const blogToUpdate = blogs[0];
+
+      delete blogToUpdate.title;
+
+      await api.patch("/api/blogs").send(blogToUpdate).expect(400);
+    });
+  });
 });
 
 after(async () => {

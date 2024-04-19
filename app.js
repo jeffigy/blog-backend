@@ -6,7 +6,7 @@ const blogRoutes = require("./routes/blogRoutes");
 const config = require("./utils/config");
 
 morgan.token("req-body", (req, _res) => {
-  if (req.method === "POST") {
+  if (process.env.NODE_ENV !== "test" && req.method === "POST") {
     return JSON.stringify(req.body);
   }
   return "";

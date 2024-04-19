@@ -57,7 +57,6 @@ describe("when there is initially some blogs saved", () => {
         .send(blogEntry)
         .expect(201)
         .expect("Content-Type", /application\/json/);
-      console.log(res.body.likes);
       assert.strictEqual(res.body.likes, 0);
     });
 
@@ -71,6 +70,26 @@ describe("when there is initially some blogs saved", () => {
       await api.post("/api/blogs").send(blogEntry).expect(400);
       const fetchedBlogs = await helper.blogsInDb();
       assert.strictEqual(fetchedBlogs.length, helper.initialBlogs.length);
+    });
+  });
+  describe("deletion of a blog", () => {
+    test("succeeds if id is valid ", async () => {
+      const blogsAtStart = await helper.blogsInDb();
+      const blogToDelete = blogsAtStart[0];
+
+      await api.delete("/api/blogs").send(blogToDelete);
+      const blogsAtEnd = await helper.blogsInDb();
+      assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length - 1);
+
+      const contents = blogsAtEnd.map((blog) => blog.id);
+
+      assert(!contents.includes(blogToDelete.id));
+    });
+
+    test("returns 400 on wrong id", async () => {
+      const wrongId = "661beaf413b4a678c6dbeb4b";
+
+      await api.delete("/api/blogs").send(wrongId).expect(400);
     });
   });
 });

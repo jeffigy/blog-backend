@@ -24,4 +24,48 @@ const newBlog = async (req, res) => {
   res.status(201).json(savedBlog);
 };
 
-module.exports = { getAllBlogs, newBlog };
+const updateBlog = async (req, res) => {
+  const { title, author, url, likes, id } = req.body;
+
+  if (!id || !title || !url) {
+    return res.status(400).send("id, title and url are required");
+  }
+
+  const blog = await Blog.findById(id).exec();
+
+  if (!blog) {
+    return res.status(400).send("Blog not found");
+  }
+
+  blog.title = title;
+  blog.author = author;
+  blog.url = url;
+  blog.likes = likes;
+
+  const updatedBlog = await blog.save();
+
+  if (!updatedBlog) {
+    return res.status(400).send("received data is invalid");
+  }
+  return res.status(200).send(JSON.stringify(updatedBlog));
+};
+
+const deleteBlog = async (req, res) => {
+  const { id } = req.body;
+
+  if (!id) {
+    return res.status(400).send("id is required");
+  }
+
+  const blog = await Blog.findByIdAndDelete(id);
+  if (!blog) {
+    return res.status(400).send("Blog not found");
+  }
+  return res.status(200).send("Blog deleted");
+};
+module.exports = {
+  getAllBlogs,
+  newBlog,
+  deleteBlog,
+  updateBlog,
+};

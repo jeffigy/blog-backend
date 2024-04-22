@@ -1,7 +1,11 @@
 const Blog = require("../models/Blog");
 
 const getAllBlogs = async (_req, res) => {
-  const blogs = await Blog.find({});
+  const blogs = await Blog.find({}).populate("users", {
+    username: 1,
+    id: 1,
+    name: 1,
+  });
   res.json(blogs);
 };
 
@@ -9,7 +13,7 @@ const newBlog = async (req, res) => {
   const { author, title, likes, url } = req.body;
 
   if (!url || !title) {
-    return res.status(400).send("Something went wrong");
+    return res.status(400).send("url and title are required");
   }
 
   const entry = {

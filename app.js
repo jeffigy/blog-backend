@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const morgan = require("morgan");
 const blogRoutes = require("./routes/blogRoutes");
 const config = require("./utils/config");
+const usersRoute = require("./routes/userRoutes");
 
 morgan.token("req-body", (req, _res) => {
   if (process.env.NODE_ENV !== "test" && req.method === "POST") {
@@ -37,5 +38,6 @@ app.get("/", (_req, res) => {
 });
 
 app.use("/api/blogs", blogRoutes);
+app.use("/api/users", usersRoute);
 
 module.exports = app;

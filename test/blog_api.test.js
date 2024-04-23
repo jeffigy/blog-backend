@@ -6,6 +6,8 @@ const app = require("../app");
 const Blog = require("../models/Blog");
 const helper = require("./test_helper");
 const api = supertest(app);
+const User = require("../models/User");
+const bcrypt = require("bcrypt");
 
 describe("when there is initially some blogs saved", () => {
   beforeEach(async () => {
@@ -113,6 +115,58 @@ describe("when there is initially some blogs saved", () => {
 
       await api.patch("/api/blogs").send(blogToUpdate).expect(400);
     });
+  });
+
+  describe("when there is initially one user at db", () => {
+    beforeEach(async () => {
+      await User.deleteMany({});
+
+      const hashedPassword = await bcrypt.hash("password", 10);
+      const user = new User({
+        username: "root",
+        name: "root",
+        password: hashedPassword,
+      });
+
+      await user.save();
+    });
+
+    test("user creation succeeds with a unique username", async () => {
+      const newUser = {
+        username: "johnDoe",
+        name: "John Doe",
+        password: "john123",
+      };
+
+      await api
+        .post("/api/users")
+        .send(newUser)
+        .expect(201)
+        .expect("Content-Type", /application\/json/);
+
+      const usersInDb = await helper.usersInDB();
+
+      const usernames = usersInDb.map((user) => user.username);
+      assert(usernames.includes(newUser.username));
+    });
+  });
+
+  test("user creation fails if username already taken", async () => {
+    const usersFromStart = await helper.usersInDB();
+    const newUser = {
+      username: "root",
+      name: "RootUser",
+      password: "root",
+    };
+
+    await api
+      .post("/api/users")
+      .send(newUser)
+      .expect(400)
+      .expect("Content-Type", /application\/json/);
+
+    const usersInEnd = await helper.usersInDB();
+    assert.strictEqual(usersInEnd.length, usersFromStart.length);
   });
 });
 

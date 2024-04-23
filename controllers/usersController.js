@@ -16,13 +16,25 @@ const newUser = async (req, res) => {
   const { username, name, password } = req.body;
 
   if (!name || !password || !username) {
-    return res.status(400).json({ error: "all fields are required" });
+    return res.status(400).json({ message: "all fields are required" });
   }
 
   if (password.length < 3 || username.length < 3) {
     return res
       .status(400)
-      .json({ error: "password and username must be at least 3 characters" });
+      .json({ message: "password and username must be at least 3 characters" });
+  }
+
+  const duplicateUsername = await User.findOne({ username })
+    .collation({
+      locale: "en",
+      strength: 2,
+    })
+    .lean()
+    .exec();
+
+  if (duplicateUsername) {
+    return res.status(400).json({ message: "username is not available" });
   }
 
   const saltRounds = 10;

@@ -1,4 +1,14 @@
 const Blog = require("../models/Blog");
+const jwt = require("jsonwebtoken");
+const User = require("../models/User");
+
+const getTokenFrom = (request) => {
+  const authorization = request.get("authorization");
+  if (authorization && authorization.startsWith("Bearer ")) {
+    return authorization.replace("Bearer ", "");
+  }
+  return null;
+};
 
 const getAllBlogs = async (_req, res) => {
   const blogs = await Blog.find({}).populate("user", {
@@ -16,15 +26,23 @@ const newBlog = async (req, res) => {
     return res.status(400).send("url and title are required");
   }
 
-  const entry = {
+  const decodedToken = jwt.verify(getTokenFrom(req), process.env.SECRET);
+  if (!decodedToken.id) {
+    return res.status(401).json({ message: "token invalid " });
+  }
+
+  const user = await User.findById(decodedToken.id);
+
+  const entry = new Blog({
     author,
     title,
     url,
     likes: likes ? likes : 0,
-  };
+  });
 
-  const newBlog = new Blog(entry);
-  const savedBlog = await newBlog.save();
+  const savedBlog = await entry.save();
+  user.blogs = user.blogs.concat(savedBlog._id);
+  await user.save();
   res.status(201).json(savedBlog);
 };
 

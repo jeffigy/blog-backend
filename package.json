@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon server.js",
     "start": "cross-env NODE_ENV=production node server.js",
-    "test": "cross-env NODE_ENV=test node --test"
+    "test": "jest --verbose"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
@@ -20,6 +20,10 @@
   },
   "devDependencies": {
     "cross-env": "^7.0.3",
+    "jest": "^29.7.0",
     "supertest": "^6.3.4"
+  },
+  "jest": {
+    "testEnvironment": "node"
   }
 }

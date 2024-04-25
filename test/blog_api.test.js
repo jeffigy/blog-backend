@@ -194,6 +194,12 @@ test("blogs are returned", async () => {
   expect(res.body).toHaveLength(testHelper.initialBlogs.length);
 });
 
+test("Identifier is id", async () => {
+  const blogs = await testHelper.blogsInDb();
+  const blog = blogs.some((obj) => "id" in obj);
+  expect(blog).toBe(true);
+});
+
 afterAll(async () => {
   await mongoose.connection.close();
 });

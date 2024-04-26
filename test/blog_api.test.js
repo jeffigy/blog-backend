@@ -219,18 +219,21 @@ describe("addition of a blog", () => {
     expect(fetchedBlogs).toHaveLength(helper.initialBlogs.length + 1);
   });
 
-  // test("if likes is missing, it will default to 0", async () => {
-  //   const blogEntry = {
-  //     title: "Don Quixote",
-  //     author: "Miguel de Cervantes",
-  //     url: "https://search.worldcat.org/title/don-quixote/oclc/1020679308",
-  //   };
+  test("if likes is missing, it will default to 0", async () => {
+    const blogEntry = {
+      title: "Don Quixote",
+      author: "Miguel de Cervantes",
+      url: "https://search.worldcat.org/title/don-quixote/oclc/1020679308",
+    };
 
-  //   const res = await api
-  //     .post("/api/blogs")
-  //     .send(blogEntry)
-  //   assert.strictEqual(res.body.likes, 0);
-  // });
+    const res = await api
+      .post("/api/blogs")
+      .send(blogEntry)
+      .expect(201)
+      .expect("Content-Type", /application\/json/);
+
+    expect(res.body.likes).toBe(0);
+  });
 
   // test("if title or url is missing, it will return status 400", async () => {
   //   const blogEntry = {

@@ -235,17 +235,17 @@ describe("addition of a blog", () => {
     expect(res.body.likes).toBe(0);
   });
 
-  // test("if title or url is missing, it will return status 400", async () => {
-  //   const blogEntry = {
-  //     author: "Miguel de Cervantes",
-  //     likes: 1,
-  //     url: "https://search.worldcat.org/title/don-quixote/oclc/1020679308",
-  //   };
+  test("if title or url is missing, it will return status 400", async () => {
+    const blogEntry = {
+      author: "Miguel de Cervantes",
+      likes: 1,
+      url: "https://search.worldcat.org/title/don-quixote/oclc/1020679308",
+    };
 
-  //   await api.post("/api/blogs").send(blogEntry).expect(400);
-  //   const fetchedBlogs = await helper.blogsInDb();
-  //   assert.strictEqual(fetchedBlogs.length, helper.initialBlogs.length);
-  // });
+    await api.post("/api/blogs").send(blogEntry).expect(400);
+    const fetchedBlogs = await helper.blogsInDb();
+    expect(fetchedBlogs).toHaveLength(helper.initialBlogs.length);
+  });
 });
 
 afterAll(async () => {

@@ -47,13 +47,13 @@ const newBlog = async (req, res) => {
 };
 
 const updateBlog = async (req, res) => {
-  const { title, author, url, likes, id } = req.body;
+  const { title, author, url, likes } = req.body;
 
-  if (!id || !title || !url) {
-    return res.status(400).send("id, title and url are required");
+  if (!title || !url) {
+    return res.status(400).send("title and url are required");
   }
 
-  const blog = await Blog.findById(id).exec();
+  const blog = await Blog.findById(req.params.id).exec();
 
   if (!blog) {
     return res.status(400).send("Blog not found");

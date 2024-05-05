@@ -74,11 +74,7 @@ const updateBlog = async (req, res) => {
 };
 
 const deleteBlog = async (req, res) => {
-  const { id } = req.body;
-
-  if (!id) {
-    return res.status(400).send("id is required");
-  }
+  const id = req.params.id;
 
   const blog = await Blog.findByIdAndDelete(id);
   if (!blog) {
@@ -86,6 +82,7 @@ const deleteBlog = async (req, res) => {
   }
   return res.status(200).send("Blog deleted");
 };
+
 module.exports = {
   getAllBlogs,
   newBlog,
